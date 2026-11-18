@@ -228,7 +228,7 @@ export type OutboxMessageGroupByOutputType = {
   processedAt: Date | null
   failedAt: Date | null
   eventType: $Enums.EventType
-  orderId: string
+  orderId: string | null
   messsageStatus: $Enums.MessageStatus
   retryCount: number
   errorMessage: string | null
@@ -266,13 +266,13 @@ export type OutboxMessageWhereInput = {
   processedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   eventType?: Prisma.EnumEventTypeFilter<"OutboxMessage"> | $Enums.EventType
-  orderId?: Prisma.StringFilter<"OutboxMessage"> | string
+  orderId?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
   messsageStatus?: Prisma.EnumMessageStatusFilter<"OutboxMessage"> | $Enums.MessageStatus
   retryCount?: Prisma.IntFilter<"OutboxMessage"> | number
   errorMessage?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
   scheduledAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   userId?: Prisma.StringFilter<"OutboxMessage"> | string
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   account?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -283,7 +283,7 @@ export type OutboxMessageOrderByWithRelationInput = {
   processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
   messsageStatus?: Prisma.SortOrder
   retryCount?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -303,13 +303,13 @@ export type OutboxMessageWhereUniqueInput = Prisma.AtLeast<{
   processedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   eventType?: Prisma.EnumEventTypeFilter<"OutboxMessage"> | $Enums.EventType
-  orderId?: Prisma.StringFilter<"OutboxMessage"> | string
+  orderId?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
   messsageStatus?: Prisma.EnumMessageStatusFilter<"OutboxMessage"> | $Enums.MessageStatus
   retryCount?: Prisma.IntFilter<"OutboxMessage"> | number
   errorMessage?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
   scheduledAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   userId?: Prisma.StringFilter<"OutboxMessage"> | string
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   account?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -320,7 +320,7 @@ export type OutboxMessageOrderByWithAggregationInput = {
   processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
   messsageStatus?: Prisma.SortOrder
   retryCount?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -343,7 +343,7 @@ export type OutboxMessageScalarWhereWithAggregatesInput = {
   processedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OutboxMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OutboxMessage"> | Date | string | null
   eventType?: Prisma.EnumEventTypeWithAggregatesFilter<"OutboxMessage"> | $Enums.EventType
-  orderId?: Prisma.StringWithAggregatesFilter<"OutboxMessage"> | string
+  orderId?: Prisma.StringNullableWithAggregatesFilter<"OutboxMessage"> | string | null
   messsageStatus?: Prisma.EnumMessageStatusWithAggregatesFilter<"OutboxMessage"> | $Enums.MessageStatus
   retryCount?: Prisma.IntWithAggregatesFilter<"OutboxMessage"> | number
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"OutboxMessage"> | string | null
@@ -362,7 +362,7 @@ export type OutboxMessageCreateInput = {
   retryCount?: number
   errorMessage?: string | null
   scheduledAt?: Date | string | null
-  order: Prisma.OrderCreateNestedOneWithoutOutboxMessagesInput
+  order?: Prisma.OrderCreateNestedOneWithoutOutboxMessagesInput
   account: Prisma.UserCreateNestedOneWithoutOutboxMessagesInput
 }
 
@@ -373,7 +373,7 @@ export type OutboxMessageUncheckedCreateInput = {
   processedAt?: Date | string | null
   failedAt?: Date | string | null
   eventType: $Enums.EventType
-  orderId: string
+  orderId?: string | null
   messsageStatus?: $Enums.MessageStatus
   retryCount?: number
   errorMessage?: string | null
@@ -392,7 +392,7 @@ export type OutboxMessageUpdateInput = {
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  order?: Prisma.OrderUpdateOneRequiredWithoutOutboxMessagesNestedInput
+  order?: Prisma.OrderUpdateOneWithoutOutboxMessagesNestedInput
   account?: Prisma.UserUpdateOneRequiredWithoutOutboxMessagesNestedInput
 }
 
@@ -403,7 +403,7 @@ export type OutboxMessageUncheckedUpdateInput = {
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messsageStatus?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -418,7 +418,7 @@ export type OutboxMessageCreateManyInput = {
   processedAt?: Date | string | null
   failedAt?: Date | string | null
   eventType: $Enums.EventType
-  orderId: string
+  orderId?: string | null
   messsageStatus?: $Enums.MessageStatus
   retryCount?: number
   errorMessage?: string | null
@@ -446,7 +446,7 @@ export type OutboxMessageUncheckedUpdateManyInput = {
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messsageStatus?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -628,7 +628,7 @@ export type OutboxMessageCreateWithoutAccountInput = {
   retryCount?: number
   errorMessage?: string | null
   scheduledAt?: Date | string | null
-  order: Prisma.OrderCreateNestedOneWithoutOutboxMessagesInput
+  order?: Prisma.OrderCreateNestedOneWithoutOutboxMessagesInput
 }
 
 export type OutboxMessageUncheckedCreateWithoutAccountInput = {
@@ -638,7 +638,7 @@ export type OutboxMessageUncheckedCreateWithoutAccountInput = {
   processedAt?: Date | string | null
   failedAt?: Date | string | null
   eventType: $Enums.EventType
-  orderId: string
+  orderId?: string | null
   messsageStatus?: $Enums.MessageStatus
   retryCount?: number
   errorMessage?: string | null
@@ -681,7 +681,7 @@ export type OutboxMessageScalarWhereInput = {
   processedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"OutboxMessage"> | Date | string | null
   eventType?: Prisma.EnumEventTypeFilter<"OutboxMessage"> | $Enums.EventType
-  orderId?: Prisma.StringFilter<"OutboxMessage"> | string
+  orderId?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
   messsageStatus?: Prisma.EnumMessageStatusFilter<"OutboxMessage"> | $Enums.MessageStatus
   retryCount?: Prisma.IntFilter<"OutboxMessage"> | number
   errorMessage?: Prisma.StringNullableFilter<"OutboxMessage"> | string | null
@@ -750,7 +750,7 @@ export type OutboxMessageCreateManyAccountInput = {
   processedAt?: Date | string | null
   failedAt?: Date | string | null
   eventType: $Enums.EventType
-  orderId: string
+  orderId?: string | null
   messsageStatus?: $Enums.MessageStatus
   retryCount?: number
   errorMessage?: string | null
@@ -768,7 +768,7 @@ export type OutboxMessageUpdateWithoutAccountInput = {
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  order?: Prisma.OrderUpdateOneRequiredWithoutOutboxMessagesNestedInput
+  order?: Prisma.OrderUpdateOneWithoutOutboxMessagesNestedInput
 }
 
 export type OutboxMessageUncheckedUpdateWithoutAccountInput = {
@@ -778,7 +778,7 @@ export type OutboxMessageUncheckedUpdateWithoutAccountInput = {
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messsageStatus?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -792,7 +792,7 @@ export type OutboxMessageUncheckedUpdateManyWithoutAccountInput = {
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messsageStatus?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   retryCount?: Prisma.IntFieldUpdateOperationsInput | number
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -870,7 +870,7 @@ export type OutboxMessageSelect<ExtArgs extends runtime.Types.Extensions.Interna
   errorMessage?: boolean
   scheduledAt?: boolean
   userId?: boolean
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["outboxMessage"]>
 
@@ -887,7 +887,7 @@ export type OutboxMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   errorMessage?: boolean
   scheduledAt?: boolean
   userId?: boolean
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["outboxMessage"]>
 
@@ -904,7 +904,7 @@ export type OutboxMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   errorMessage?: boolean
   scheduledAt?: boolean
   userId?: boolean
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["outboxMessage"]>
 
@@ -925,22 +925,22 @@ export type OutboxMessageSelectScalar = {
 
 export type OutboxMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "processedAt" | "failedAt" | "eventType" | "orderId" | "messsageStatus" | "retryCount" | "errorMessage" | "scheduledAt" | "userId", ExtArgs["result"]["outboxMessage"]>
 export type OutboxMessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type OutboxMessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type OutboxMessageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.OutboxMessage$orderArgs<ExtArgs>
   account?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $OutboxMessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OutboxMessage"
   objects: {
-    order: Prisma.$OrderPayload<ExtArgs>
+    order: Prisma.$OrderPayload<ExtArgs> | null
     account: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -950,7 +950,7 @@ export type $OutboxMessagePayload<ExtArgs extends runtime.Types.Extensions.Inter
     processedAt: Date | null
     failedAt: Date | null
     eventType: $Enums.EventType
-    orderId: string
+    orderId: string | null
     messsageStatus: $Enums.MessageStatus
     retryCount: number
     errorMessage: string | null
@@ -1350,7 +1350,7 @@ readonly fields: OutboxMessageFieldRefs;
  */
 export interface Prisma__OutboxMessageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  order<T extends Prisma.OutboxMessage$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OutboxMessage$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1786,6 +1786,25 @@ export type OutboxMessageDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many OutboxMessages to delete.
    */
   limit?: number
+}
+
+/**
+ * OutboxMessage.order
+ */
+export type OutboxMessage$orderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
 }
 
 /**

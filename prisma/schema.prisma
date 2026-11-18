@@ -50,8 +50,8 @@ model OutboxMessage {
     processedAt    DateTime?     @map("processed_at")
     failedAt       DateTime?     @map("failed_at")
     eventType      EventType
-    orderId        String        @map("order_id") @db.Char(26)
-    order          Order         @relation(fields: [orderId], references: [id])
+    orderId        String?        @map("order_id") @db.Char(26)
+    order          Order?         @relation(fields: [orderId], references: [id])
     messsageStatus MessageStatus @default(RECEIVED)
     retryCount Int @default(0) @map("retry_count")
     errorMessage String? @map("error") @db.VarChar(255)
@@ -79,4 +79,5 @@ enum MessageStatus {
 
 enum EventType {
     ORDER_CREATED
+    USER_CREATED
 }

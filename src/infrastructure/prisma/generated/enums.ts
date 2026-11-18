@@ -30,7 +30,8 @@ export type MessageStatus = (typeof MessageStatus)[keyof typeof MessageStatus]
 
 
 export const EventType = {
-  ORDER_CREATED: 'ORDER_CREATED'
+  ORDER_CREATED: 'ORDER_CREATED',
+  USER_CREATED: 'USER_CREATED'
 } as const
 
 export type EventType = (typeof EventType)[keyof typeof EventType]

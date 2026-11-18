@@ -3,13 +3,13 @@ import { ulid } from "ulid";
 import { USER_REPOSITORY, UserRepositoryPort } from "../../domain/ports/user.repository.port.js";
 import { CreateUserCommand } from "../command/createUser.command.js";
 import { User } from "../../domain/entities/user.entity.js";
-import { EVENT_PUBLISH, EventPublishPort } from "../../domain/ports/eventPublish.port.js";
+import { EventType, MessageStatus, OutboxMessage } from "../../domain/entities/outboxMessage.entity.js";
 
 @Injectable()
 export class CreateUserHandler {
-    constructor(@Inject(USER_REPOSITORY) private readonly userRepo: UserRepositoryPort, @Inject(EVENT_PUBLISH) private readonly eventPublish: EventPublishPort) { }
+    constructor(@Inject(USER_REPOSITORY) private readonly userRepo: UserRepositoryPort) { }
 
-    async execute(createUserCommand: CreateUserCommand): Promise<User> {
+    async execute(createUserCommand: CreateUserCommand): Promise<boolean> {
         try {
             const user: User = {
                 id: ulid(),
@@ -17,15 +17,21 @@ export class CreateUserHandler {
                 lastName: createUserCommand.lastName,
                 email: createUserCommand.email,
             }
-            const savedUser: User = await this.userRepo.save(user);
-            this.eventPublish.publishEvent({
-                eventType: "USER_CREATED",
-                data: {
-                    userId: savedUser.id,
-                    email: savedUser.email
-                }
-            });
-            return savedUser;
+            const outboxMessage: OutboxMessage = {
+                id: ulid(),
+                eventType: EventType.USER_CREATED,
+                messsageStatus: MessageStatus.PROCESSING,
+                account: user
+            }
+            const isSavedUser: boolean = await this.userRepo.save(user, outboxMessage);
+            // this.eventPublish.publishEvent({
+            //     eventType: "USER_CREATED",
+            //     data: {
+            //         userId: savedUser.id,
+            //         email: savedUser.email
+            //     }
+            // });
+            return isSavedUser;
         } catch (error) {
             throw error;
         }

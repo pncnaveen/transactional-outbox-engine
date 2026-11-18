@@ -414,9 +414,9 @@ export type OrderSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
 }
 
-export type OrderScalarRelationFilter = {
-  is?: Prisma.OrderWhereInput
-  isNot?: Prisma.OrderWhereInput
+export type OrderNullableScalarRelationFilter = {
+  is?: Prisma.OrderWhereInput | null
+  isNot?: Prisma.OrderWhereInput | null
 }
 
 export type OrderCreateNestedManyWithoutUserInput = {
@@ -525,10 +525,12 @@ export type OrderCreateNestedOneWithoutOutboxMessagesInput = {
   connect?: Prisma.OrderWhereUniqueInput
 }
 
-export type OrderUpdateOneRequiredWithoutOutboxMessagesNestedInput = {
+export type OrderUpdateOneWithoutOutboxMessagesNestedInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutOutboxMessagesInput, Prisma.OrderUncheckedCreateWithoutOutboxMessagesInput>
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutOutboxMessagesInput
   upsert?: Prisma.OrderUpsertWithoutOutboxMessagesInput
+  disconnect?: Prisma.OrderWhereInput | boolean
+  delete?: Prisma.OrderWhereInput | boolean
   connect?: Prisma.OrderWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutOutboxMessagesInput, Prisma.OrderUpdateWithoutOutboxMessagesInput>, Prisma.OrderUncheckedUpdateWithoutOutboxMessagesInput>
 }
