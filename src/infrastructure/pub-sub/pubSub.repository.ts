@@ -4,11 +4,11 @@ import { RedisService } from "../redis/redis.service.js";
 
 @Injectable()
 export class PubSubRepository implements EventPublishPort {
-    constructor(private readonly redisService: RedisService){}
+    constructor(private readonly redisService: RedisService) { }
 
-    async publishEvent(event: any): Promise<void> {
+    async publishEvent(channel: string, event: any): Promise<void> {
         try {
-            await this.redisService.publishEvent(event);
+            await this.redisService.publishEvent(channel, event);
         } catch (error) {
             throw new Error("Failed to publish event");
         }

@@ -1,8 +1,9 @@
-import { EventType, OutboxMessage } from "../entities/outboxMessage.entity.js";
+import { EventType, MessageStatus, OutboxMessage } from "../entities/outboxMessage.entity.js";
 
 export interface OutboxMessagesRepositoryPort {
     save(outboxMessage: OutboxMessage): Promise<boolean>;
-    findAllByEventType(eventType: EventType): Promise<OutboxMessage[]>;
+    updateMessageStatus(eventType: EventType, queryMessageStatus: MessageStatus, updateMessageStatus: MessageStatus): Promise<OutboxMessage[]>;
+    updateMessageStatusById(eventId: string, updateMessageStatus: MessageStatus): Promise<boolean>;
 }
 
 export const OUTBOX_MESSAGES_REPOSITORY = "OUTBOX_MESSAGES_REPOSITORY";

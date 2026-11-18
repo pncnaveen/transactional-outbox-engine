@@ -11,15 +11,9 @@ export class SchedulerService {
     @Cron(CronExpression.EVERY_MINUTE)
     async handleCron() {
         console.log("cron job running for every 1 seconds");
-
-        //    const jobs =  this.schedulerRegistry.getCronJobs();
-        //    jobs.forEach(job => {
-        //     job.na
-        //    });
     }
 
     createScheduler(name: string, cronExpression: CronExpression, jobFunction: () => void): void {
-        // const cronExpression = CronExpression.EVERY_5_SECONDS.toString();
         const job = new CronJob(cronExpression.toString(), jobFunction);
         this.schedulerRegistry.addCronJob(name, job);
         job.start();

@@ -1,11 +1,14 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Redis } from "ioredis";
+import { EventType, MessageStatus, OutboxMessage } from "../../domain/entities/outboxMessage.entity.js";
+import { OUTBOX_MESSAGES_REPOSITORY, OutboxMessagesRepositoryPort } from "../../domain/ports/outboxMessages.repository.port.js";
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
     private redisClient!: Redis;
-    constructor(private readonly configService: ConfigService) { }
+    constructor(private readonly configService: ConfigService, 
+        @Inject(OUTBOX_MESSAGES_REPOSITORY) private readonly outboxMessagesRepo: OutboxMessagesRepositoryPort) { }
 
     async onModuleInit(): Promise<void> {
         try {
@@ -38,9 +41,9 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
-    async publishEvent(event: any): Promise<void> {
+    async publishEvent(channel: string, event: any): Promise<void> {
         try {
-            await this.redisClient.publish("event-channel", JSON.stringify(event));
+            await this.redisClient.publish(channel, JSON.stringify(event));
         } catch (error) {
             throw new Error("Failed to publish event");
         }
@@ -48,15 +51,20 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     async sunscribeEvent(): Promise<void> {
         try {
-            this.redisClient.subscribe("event-channel", (error, count) => {
-                if (error) {
-                    console.error("Error subscribing to channel:", error);
-                } else {
-                    console.log(`Subscribed to channel. Total subscriptions: ${count}`);
-                }
+            const channels = [...Object.values(EventType)];
+            channels.forEach(channel => {
+                this.redisClient.subscribe(channel, (error, count) => {
+                    if (error) {
+                        console.error("Error subscribing to channel:", error);
+                    } else {
+                        console.log(`Subscribed to ${channel}. Total subscriptions: ${count}`);
+                    }
+                });
             });
 
             this.redisClient.on("message", (channel, message) => {
+                const event = JSON.parse(message) as OutboxMessage;
+                this.outboxMessagesRepo.updateMessageStatusById(event.id, MessageStatus.PROCESSED);
                 console.log(`Received message on channel ${channel}: ${message}`);
             });
         } catch (error) {

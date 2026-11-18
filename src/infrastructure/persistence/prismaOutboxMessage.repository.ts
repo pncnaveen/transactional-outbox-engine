@@ -1,8 +1,8 @@
 import { ulid } from "ulid";
-import { MessageStatus, EventType } from "../prisma/generated/enums.js";
+import { EventType } from "../prisma/generated/enums.js";
 import { OutboxMessageCreateInput } from "../prisma/generated/models.js";
 import { PrismaService } from "../prisma/prisma.service.js";
-import { EventType as DomainEventType, OutboxMessage } from "../../domain/entities/outboxMessage.entity.js";
+import { EventType as DomainEventType, MessageStatus, OutboxMessage } from "../../domain/entities/outboxMessage.entity.js";
 import { OutboxMessagesRepositoryPort } from "../../domain/ports/outboxMessages.repository.port.js";
 import { Injectable } from "@nestjs/common";
 import { User } from "../../domain/entities/user.entity.js";
@@ -36,29 +36,55 @@ export class PrismaOutboxMessageRepository implements OutboxMessagesRepositoryPo
         }
     }
 
-    async findAllByEventType(eventType: DomainEventType): Promise<OutboxMessage[]> {
-
+    async updateMessageStatus(eventType: DomainEventType, queryMessageStatus: MessageStatus, updateMessageStatus: MessageStatus): Promise<OutboxMessage[]> {
         try {
             const outboxMessages: OutboxMessage[] = [];
-            const response = await this.prisma.outboxMessage.findMany({
-                where: {
-                    eventType: eventType as EventType
-                },
-                include: {
-                    account: true
+
+            await this.prisma.$transaction(async (tx) => {
+                const response = await tx.$queryRaw<OutboxMessage[]>`SELECT id, event_type as "eventType" FROM outbox_messages 
+                WHERE "messsage_status" = ${queryMessageStatus.toString()} :: "MessageStatus" AND "event_type" = ${eventType.toString()} :: "EventType"
+                ORDER BY created_at ASC 
+                LIMIT 50 
+                FOR UPDATE SKIP LOCKED`;
+
+                if (response.length == 0) {
+                    return outboxMessages;
                 }
-            });
-            response.forEach(outboxMessage => {
-                outboxMessages.push({
-                    id: outboxMessage.id,
-                    eventType: outboxMessage.eventType as DomainEventType,
-                    account: outboxMessage.account as User
+                response.forEach(outboxMessage => {
+                    outboxMessages.push({
+                        id: outboxMessage.id,
+                        eventType: outboxMessage.eventType as DomainEventType,
+                        account: outboxMessage.account as User
+                    });
                 });
+
+                await tx.outboxMessage.updateMany({
+                    where: {
+                        id: {
+                            in: outboxMessages.map(message => message.id)
+                        }
+                    },
+                    data: {
+                        messsageStatus: updateMessageStatus
+                    }
+                })
             });
+
             return outboxMessages;
         } catch (error) {
             throw error;
         }
+    }
 
+    async updateMessageStatusById(eventId: string, updateMessageStatus: MessageStatus): Promise<boolean> {
+        try {
+            const response = await this.prisma.outboxMessage.update({
+                where: { id: eventId },
+                data: { messsageStatus: updateMessageStatus }
+            });
+            return true;
+        } catch (error) {
+            throw error;
+        }
     }
 }
